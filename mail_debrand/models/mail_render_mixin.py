@@ -2,6 +2,7 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
 # Copyright 2020 Onestein - Andrea Stirpe
 # Copyright 2021 Tecnativa - João Marques
+# Copyright 2024 Modern Logic - Andrew Rahn
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import re
 
@@ -77,8 +78,14 @@ class MailRenderMixin(models.AbstractModel):
         :param str model: model name of records on which we want to perform rendering
         :param list res_ids: list of ids of records (all belonging to same model)
         :param string engine: inline_template, qweb or qweb_view;
-        :param post_process: perform rendered str / html post processing (see
-          ``_render_template_postprocess``)
+        :param dict options: options for rendering. Use in this method and also
+          propagated to rendering sub-methods. May contain notably
+
+            boolean post_process: perform a post processing on rendered result
+            (notably html links management). See``_render_template_postprocess``;
+            boolean preserve_comments: if set, comments are preserved. Default
+            behavior is to remove them. It is used notably for browser-specific
+            code implemented like comments;
 
         :return dict: {res_id: string of rendered template based on record}"""
         orginal_rendered = super()._render_template(
